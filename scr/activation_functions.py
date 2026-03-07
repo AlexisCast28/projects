@@ -26,6 +26,22 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+"""
+- Forma: Curva en forma de 'S', pero estirada de sus extremos de manera horizontal.
+
+- Salida: esta funcion solo te gener avalores de 0 a 1.
+
+- Uso: Dado que la funcion sigmoid solo te genera valores de 0 y 1 es ideal para usarse 
+  en la capa de salida
+
+- Ventaja: Es muy practica y facil de entender e ideal para problemas de clasificacion binaria que sean tabulares
+  es decir que como lo hemos visto que sean de datos numericos.
+
+- Problema: No puede ser utilizada para problemas multiclase ya que solo genera valores de 1 y 0,
+  ademas de que investigando un poco lei que esta funcion puede generar falsos positivos o falsos negativos,
+  ya que los datos tabulares se acercan o se aproximan al 0 o al 1 lo que darian esos FP Y FN
+
+"""
 
 # Funcion Tanh
 def tanh(x):
@@ -43,6 +59,20 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+"""
+- Forma: esta es parecida a la sigmoid, soloq ue esta sus extremos parecieran estirados de manera vertical,
+  ademas de que esta el centro de la S esta centrado en las coordenadas (0, 0)  .
+
+- Salida: esta funcion al estar centrado su punto medio en el eje 0, 0; genera valores entre -1 y 1.
+
+- Uso: Esta es usada en capas ocultas para problemas de clasificacion binaria, aunque tambien puede ser usada en problemas multiclase, pero no es tan comun.
+
+- Ventaja: al estar centrada justo en el valor 0, ayuda a que el aprendizaje de nuestra red neuronal sea mas rapido,
+
+- Problema: investigando comprendi que sufre saturacion en valores extremos es decir que la red se le es mas dificil ,
+  aprender a partir de esos valores.
+
+"""
 
 # Funcion ReLU
 def ReLU(x):
@@ -60,6 +90,20 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+"""
+- Forma: Un ángulo recto (0 para negativos, una línea diagonal para positivos).
+- Salida: De 0 hasta infinito [0, ∞).
+
+- Salida: De 0 hasta infinito [0, ∞).
+
+- Uso: Capas ocultas en casi todas las redes modernas.
+
+- Ventaja: Es muy rápida de calcular y reduce el desvanecimiento de gradiente.
+
+- Problema: "Dying ReLU" (las neuronas pueden "morir" y dejar de activarse si 
+  siempre reciben valores negativos).
+
+"""
 
 #Funcion Leaky ReLU
 def Leaky_ReLU(x):
@@ -77,6 +121,18 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+"""
+- Forma: Similar a ReLU, pero con una pequeña pendiente en la parte negativa.
+
+- Salida: De menos infinito a infinito (-∞, ∞).
+
+- Uso: Capas ocultas cuando se quiere evitar que las neuronas "mueran".
+
+- Ventaja: Permite que pase un pequeño flujo de información incluso para valores negativos.
+
+- Problema: El valor de la pendiente (alpha) es un parámetro extra que hay que ajustar.
+
+"""
 
 #Funcion Softplus
 def softplus(x):
@@ -94,14 +150,26 @@ plt.grid(True)
 plt.legend()
 plt.show()
 
+"""
+- Forma: Una curva suave que actúa como una versión "redondeada" de ReLU.
+
+- Salida: De 0 a infinito (0, ∞).
+
+- Uso: Capas ocultas donde se requiere una transición suave.
+
+- Ventaja: Es derivable en todos sus puntos (a diferencia de ReLU en el punto 0).
+
+- Problema: Es computacionalmente más costosa que ReLU debido al logaritmo y la exponencial.
+
+"""
 
 plt.figure()
 
-plt.plot(x,sigmoid(x),label="Sigmoid")
-plt.plot(x,tanh(x),label="Tanh")
-plt.plot(x,ReLU(x),label="ReLU")
-plt.plot(x,Leaky_ReLU(x),label="Leaky ReLU")
-plt.plot(x,softplus(x),label="Softplus")
+plt.plot(x,sigmoid(x),label="Sigmoid", linewidth= .5)
+plt.plot(x,tanh(x),label="Tanh", linewidth= .5)
+plt.plot(x,ReLU(x),label="ReLU", linewidth= .5)
+plt.plot(x,Leaky_ReLU(x),label="Leaky ReLU", linewidth= .5)
+plt.plot(x,softplus(x),label="Softplus", linewidth= .5)
 
 plt.title("Comparación de Funciones de Activación")
 plt.xlabel("x")
