@@ -178,3 +178,21 @@ plt.grid(True)
 plt.legend()
 
 plt.show()
+
+# =====================================================
+# CONCLUSIONES FINALES
+# =====================================================
+
+# 1. ¿Cuál es la más utilizada en redes modernas? 
+# ReLU es el estándar actual para capas ocultas.
+
+# 2. ¿Por qué ReLU es preferida sobre Sigmoid? 
+# Porque evita que el gradiente se desvanezca rápido y es mucho 
+# más simple matemáticamente, lo que acelera el entrenamiento.
+
+# 3. ¿Qué función usarías para salida en clasificación binaria? 
+# Sigmoid (porque devuelve un valor entre 0 y 1, ideal para probabilidades de "sí" o "no").
+# y para calsificacion binaria no necesariamente de si o no pero si necesario que sean tabulares
+
+# 4. ¿Qué función usarías para clasificación multiclase? 
+# Softmax (es la extensión de la Sigmoide para múltiples categorías).
