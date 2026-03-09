@@ -59,10 +59,13 @@ class_weight = {0: float(cw[0]), 1:float(cw[1])}
 #el data set
 def build_model(input_dim):
   inputs =tf.keras.Input(shape=(input_dim,))
-  x = tf.keras.layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001))(inputs)
-  x = tf.keras.layers.Dropout(0.25)(x)
-  x = tf.keras.layers.Dense(32, activation='relu',  kernel_regularizer=tf.keras.regularizers.l2(0.001))(x)
+  x = tf.keras.layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.0005))(inputs)
+  x = tf.keras.layers.BatchNormalization()(x)
+  x = tf.keras.layers.Dropout(0.30)(x)
+  x = tf.keras.layers.Dense(32, activation='relu',  kernel_regularizer=tf.keras.regularizers.l2(0.0005))(x)
   x = tf.keras.layers.Dropout(0.20)(x)
+  x = tf.keras.layers.Dense(16, activation='relu')(x)
+  x = tf.keras.layers.Dense(8, activation='relu')(x)
   outputs = tf.keras.layers.Dense(1, activation='sigmoid')(x)
   return tf.keras.Model(inputs, outputs)
 
@@ -88,11 +91,11 @@ callbacks = [
     tf.keras.callbacks.EarlyStopping(
         monitor='val_auc_roc',
         mode='max',
-        patience=15,
+        patience=30,
         restore_best_weights=True)
 ]
-
-lr=0.0001
+model.summary()
+lr=0.0005
 model.compile(
     optimizer=tf.keras.optimizers.Adam(lr),
     loss='binary_crossentropy',
@@ -101,10 +104,10 @@ model.compile(
 history = model.fit(
     X_train_s, Y_train,
     validation_data = (X_val_s, Y_val),
-    epochs=100,
-    batch_size=1024,
+    epochs=200,
+    batch_size=2048,
     class_weight=class_weight,
-    verbose=1,
+    verbose=0,
     callbacks=callbacks
     )
 
@@ -134,7 +137,7 @@ def evaluate_threshold(t):
     precision = tp / (tp + fp + 1e-12)
     return cm, precision, recall
 
-target_recall = 0.98
+target_recall = 0.85
 best_threshold = 0.5
 best_precision = -1
 
@@ -211,8 +214,8 @@ plt.figure()
 plt.imshow(cm)
 plt.title("Confusion Matrix")
 plt.colorbar()
-plt.xticks([0,1], ["Benign", "Malignant"])
-plt.yticks([0,1], ["Benign", "Malignant"])
+plt.xticks([0,1], ["NORMAL", "FRAUDE"])
+plt.yticks([0,1], ["NORMAL", "FRAUDE"])
 plt.xlabel("Predicted")
 plt.ylabel("True")
 
