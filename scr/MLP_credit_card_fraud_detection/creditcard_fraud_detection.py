@@ -18,12 +18,13 @@ np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 #Cargar el dataset
-data = 'diabetes_dataset'
-df = pd.read_csv('diabetes_dataset.csv')
-X = df.drop('Outcome', axis=1).values.astype(np.float32)
-Y = df['Outcome'].values.astype(np.int32)
-print(f"Forma de X: {X.shape}") # Debería ser (768, 8)
-print(f"Forma de Y: {Y.shape}") # Debería ser (768,)
+data = 'creditcard'
+df = pd.read_csv('creditcard.csv')
+X = df.drop('Class', axis=1).values.astype(np.float32)
+Y = df['Class'].values.astype(np.int32)
+
+print(f"Forma de X (Fraude): {X.shape}") 
+print(f'Casos de fraude: {np.sum(Y==1)} de {len(Y)}')
 
 #Division de mi dataset
 #x=características
@@ -58,9 +59,9 @@ class_weight = {0: float(cw[0]), 1:float(cw[1])}
 #el data set
 def build_model(input_dim):
   inputs =tf.keras.Input(shape=(input_dim,))
-  x = tf.keras.layers.Dense(32, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.01))(inputs)
+  x = tf.keras.layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001))(inputs)
   x = tf.keras.layers.Dropout(0.25)(x)
-  x = tf.keras.layers.Dense(16, activation='relu',  kernel_regularizer=tf.keras.regularizers.l2(0.01))(x)
+  x = tf.keras.layers.Dense(32, activation='relu',  kernel_regularizer=tf.keras.regularizers.l2(0.001))(x)
   x = tf.keras.layers.Dropout(0.20)(x)
   outputs = tf.keras.layers.Dense(1, activation='sigmoid')(x)
   return tf.keras.Model(inputs, outputs)
@@ -87,7 +88,7 @@ callbacks = [
     tf.keras.callbacks.EarlyStopping(
         monitor='val_auc_roc',
         mode='max',
-        patience=50,
+        patience=15,
         restore_best_weights=True)
 ]
 
@@ -100,8 +101,8 @@ model.compile(
 history = model.fit(
     X_train_s, Y_train,
     validation_data = (X_val_s, Y_val),
-    epochs=300,
-    batch_size=64,
+    epochs=100,
+    batch_size=1024,
     class_weight=class_weight,
     verbose=1,
     callbacks=callbacks
@@ -163,7 +164,7 @@ y_pred = (pred_test >= best_threshold).astype(int)
 print(classification_report(
     Y_test,
     y_pred,
-    target_names=["Benign", "Malignant"]
+    target_names=["Normal", "Fraude"]
 ))
 
 plt.figure()
